@@ -5,6 +5,11 @@ This is a fork of pullmonkey's open flash chart plugin, it's a great plugin that
 * Project page : http://www.pullmonkey.com/projects/open_flash_chart
 * Original (non plugin) project page : http://teethgrinder.co.uk/open-flash-chart-2/
 
+h1. Installation
+
+# <pre><code>./script/plugin install git://github.com/vanntastic/open_flash_chart.git</code></pre>
+# the files should automatically copy, if they don't you can run <pre><code>rake ofc:install</code></pre>
+
 h1. Super Simple Example
 
 Assuming you have a controller named _test_it_controller.rb_ :
@@ -46,10 +51,67 @@ Assuming you have a controller named _test_it_controller.rb_ :
   </code>
 </pre>
 
+h1. Usage
+
+h2. open_flash_chart_object(width, height, url, use_swfobject=true, base="/", swf_file_name="open-flash-chart.swf")
+
+Instantiate a flash chart object, use in your controllers or views. It returns the html that will generate the chart.
+
+Options:
+
+* width : the width of your chart
+* height : the height of your chart
+* url : the url where the chart is being generated
+* use_swobject : true/false (default:true) set whether or not you want to use swfobject, keeping the default is recommended
+* base : the base path from which your chart will be requested, keeping the default is recommended
+* swf_file_name : the name of the swf that generates the chart, you should never have to change this
+
+Example : 
+
+<pre>
+  <code>
+    # assuming /index?format=json is setup to return a chart instance
+    @graph = open_flash_chart_object( 600, 300, url_for(:action => 'index', :format => :json)
+    # now you can add this to your view
+    <%= @graph %>
+  </code>
+</pre>    
+
+h2. open_flash_chart_object_and_div_name(width, height, url, use_swfobject=true, base="/", swf_file_name="open-flash-chart.swf")
+
+Same thing as _open_flash_chart_, but returns an array with the html and the div_name, can be useful for working with the chart using js.
+
+Example:
+
+<pre>
+  <code>
+    @graph = open_flash_chart_object_and_div_name(600, 300, url_for( :action => 'index', :format => :json)
+    # => [html, div_name]
+    # So if you want to use this chart in your views:
+    <%= @graph.first %>
+  </code>
+</pre>
+
+h2. open_flash_chart_object_from_hash(url, options={})
+
+Same thing but allows you to pass in options as a hash.
+
+Options:
+
+* url : url where chart is being generated
+* options={} : options hash:
+** :div_name = name of div 
+** :base = the base path of where the chart is being generated
+** :swf_file_name = the name of the swf that is being used to generate the chart, defaults to '/', it's highly recommended to keep the default
+** :width = width of the chart
+** :height = height of the chart
+** :protocol = protocol of chart url request, defaults to 'http://', keeping the default is recommended
+** :obj_id = the id for the html element, defaults to a randomly generated name
+
 h1. My Changes
 
 # This readme
-
+# Added rake task : ofc:install
 
 h1. Examples
 
