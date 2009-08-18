@@ -1,46 +1,57 @@
-OpenFlashChart  Version 2.0.0  11/14/2008 
-==============
+h1. OpenFlashChart
 
-1) rails ofc2_test_app
-2) cd ofc2_test_app
-3) script/plugin install git://github.com/pullmonkey/open_flash_chart.git
-4) script/generate controller test_it
+This is a fork of pullmonkey's open flash chart plugin, it's a great plugin that deserves a readme that is useful (to me). Here's some links to helpful sources:
 
-5) Add the following to the test_it_controller.rb in RAILS_ROOT/app/controllers:
-class TestItController < ApplicationController
-  
-  def index
-    respond_to do |wants|
-      wants.html {
-        @graph = open_flash_chart_object( 600, 300, url_for( :action => 'index', :format => :json ) )
-      }
-      wants.json { 
-        chart = OpenFlashChart.new( "MY TITLE" ) do |c|
-          c << BarGlass.new( :values => (1..10).sort_by{rand} )
+* Project page : http://www.pullmonkey.com/projects/open_flash_chart
+* Original (non plugin) project page : http://teethgrinder.co.uk/open-flash-chart-2/
+
+h1. Super Simple Example
+
+Assuming you have a controller named _test_it_controller.rb_ :
+
+<pre>
+  <code>
+    class TestItController < ApplicationController
+      
+      # test_it/index
+      def index
+        respond_to do |wants|
+          wants.html {
+            @graph = open_flash_chart_object( 600, 300, url_for( :action => 'index', :format => :json ) )
+          }
+          wants.json { 
+            chart = OpenFlashChart.new( "MY TITLE" ) do |c|
+              c << BarGlass.new( :values => (1..10).sort_by{rand} )
+            end
+            render :text => chart, :layout => false
+          }
         end
-        render :text => chart, :layout => false
-      }
+      end
+
     end
-  end
+    
+    # your layout file:
+    <html>
+      <head>
+        <script type="text/javascript" src="/javascripts/swfobject.js"></script>
+      </head>
+      <body>
+        <%= yield %>
+      </body>
+    </html>
+    
+    # your view at: views/test_it/index.html.erb:
+    <%= @graph %>
+    
+  </code>
+</pre>
 
-end
+h1. My Changes
 
-6) Add the following to index.html.erb in RAILS_ROOT/app/views/test_it/:
-<html>
-<head>
-  <script type="text/javascript" src="/javascripts/swfobject.js"></script>
-</head>
-<body>
-<%= @graph %>
-</body>
-</html>
-
-7) script/server
-8) Let me know how it goes, thanks.
+# This readme
 
 
-Example
-=======
+h1. Examples
 
 Example above and more to follow here - http://www.pullmonkey.com/projects/open_flash_chart
 
