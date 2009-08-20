@@ -7,12 +7,12 @@ This is a fork of pullmonkey's open flash chart plugin, it's a great plugin that
 
 h1. Installation
 
-# <pre><code>./script/plugin install git://github.com/vanntastic/open_flash_chart.git</code></pre>
+# run: <pre><code>./script/plugin install git://github.com/vanntastic/open_flash_chart.git</code></pre>
 # the files should automatically copy, if they don't you can run <pre><code>rake ofc:install</code></pre>
 
 h1. Super Simple Example
 
-Assuming you have a controller named _test_it_controller.rb_ :
+The open_flash_chart plugin is best used when you have a action designated for generating a chart and another action for retrieving that chart request. Assuming you have a controller named _test_it_controller.rb_ :
 
 <pre>
   <code>
@@ -38,7 +38,7 @@ Assuming you have a controller named _test_it_controller.rb_ :
     # your layout file:
     <html>
       <head>
-        <script type="text/javascript" src="/javascripts/swfobject.js"></script>
+        <%= javascript_include_tag 'swfobject' %>
       </head>
       <body>
         <%= yield %>
@@ -52,6 +52,24 @@ Assuming you have a controller named _test_it_controller.rb_ :
 </pre>
 
 h1. Usage
+
+h2. OpenFlashChart
+
+Generates a new flash chart object (best used in a json response), takes all the same arguments that you find at : http://teethgrinder.co.uk/open-flash-chart-2/. Here's some quick examples to get you started with some charts:
+
+<pre>
+  <code>
+    # simple bar chart
+    @chart = OpenFlashChart.new "Weekly Performance" do |chart|
+      # equivalent to @chart = OpenFlashChart.new; @chart.add_element(Bar.new)
+      chart << Bar.new( :values => (1..10).sort_by{rand} )
+      # the default yellow bg is super ugly, let's keep it clean
+      c.set_bg_colour '#fff'
+    end
+    render :text => @chart, :layout => false
+  </code>
+</pre>
+
 
 h2. open_flash_chart_object(width, height, url, use_swfobject=true, base="/", swf_file_name="open-flash-chart.swf")
 
